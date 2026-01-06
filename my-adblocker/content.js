@@ -96,7 +96,21 @@ const adSelectors = [
   '[class*="outbrain"]',
   '[class*="taboola"]',
   '[class*="OUTBRAIN"]',
-  '[class*="TABOOLA"]'
+  '[class*="TABOOLA"]',
+  
+  // Stripchat & Brazzers
+  'a[href*="stripchat.com"]',
+  'a[href*="go.stripchat.com"]',
+  'a[href*="brazzersnetwork.com"]',
+  'a[href*="landing.brazzersnetwork.com"]',
+  '[href*="stripchat"][class*="ad"]',
+  '[href*="brazzers"][class*="ad"]',
+  '[class*="stripchat"]',
+  '[class*="brazzers"]',
+  '[id*="stripchat"]',
+  '[id*="brazzers"]',
+  'img[src*="stripchat"]',
+  'img[src*="brazzers"]'
 ];
 
 // Hàm ẩn các phần tử quảng cáo

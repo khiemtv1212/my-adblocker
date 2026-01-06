@@ -448,5 +448,50 @@
       "urlFilter": "*://*.teads.tv/*",
       "resourceTypes": ["script", "xmlhttprequest", "sub_frame"]
     }
+  },
+  {
+    "id": 51,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "*://sukebei.nyaa.si/ads/*",
+      "resourceTypes": ["script", "xmlhttprequest", "image", "sub_frame"]
+    }
+  },
+  {
+    "id": 52,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "*://sukebei.nyaa.si/*ad*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
+    }
+  },
+  {
+    "id": 53,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "*://sukebei.nyaa.si/*banner*",
+      "resourceTypes": ["image", "sub_frame"]
+    }
+  },
+  {
+    "id": 54,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "*://go.stripchat.com/*",
+      "resourceTypes": ["script", "xmlhttprequest"]
+    }
+  },
+  {
+    "id": 55,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "*://landing.brazzersnetwork.com/*",
+      "resourceTypes": ["script", "xmlhttprequest"]
+    }
   }
 ]
