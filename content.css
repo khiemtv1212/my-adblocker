@@ -1,0 +1,109 @@
+/* Ẩn các class và ID phổ biến của quảng cáo */
+[id*="ad-"],
+[id*="ads-"],
+[id*="ad_"],
+[id^="ad-"],
+[id^="ads-"],
+[id$="-ad"],
+[id$="-ads"],
+[class*="ad-"],
+[class*="ads-"],
+[class*="ad_"],
+[class*="advertisement"],
+[class*="advert"],
+[class*="banner"],
+[class*="sponsor"],
+[class*="promo"],
+[class^="ad-"],
+[class^="ads-"],
+[id*="google_ads"],
+[class*="google-ad"],
+.advert,
+.banner-ad,
+.sponsor,
+.sponsored,
+.ad-container,
+.ad-wrapper,
+.ad-slot,
+.ad-unit,
+.ad-banner,
+.ad-box,
+.ad-block,
+.advertisement,
+.advertising,
+.google-ad,
+.adsbox,
+ins.adsbygoogle,
+[data-ad-slot],
+[data-ad-client],
+[data-google-query-id],
+[data-ad],
+[data-ads],
+[data-advertisement],
+amp-ad,
+.video-ads,
+.video-ad {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+  pointer-events: none !important;
+}
+
+/* Ẩn iframe quảng cáo */
+iframe[src*="doubleclick"],
+iframe[src*="googlesyndication"],
+iframe[src*="googleadservices"],
+iframe[src*="advertising"],
+iframe[src*="/ads/"],
+iframe[src*="ad."],
+iframe[src*="ads."],
+iframe[src*="adserver"],
+iframe[id*="google_ads"],
+iframe[name*="google_ads"],
+iframe[src*="criteo"],
+iframe[src*="outbrain"],
+iframe[src*="taboola"],
+iframe[src*="exoclick"],
+iframe[src*="popads"],
+iframe[src*="revcontent"] {
+  display: none !important;
+}
+
+/* Ẩn các element có chứa từ khóa quảng cáo */
+[aria-label*="Sponsored"],
+[aria-label*="Advertisement"],
+[aria-label*="Quảng cáo"],
+[aria-label*="Tài trợ"],
+[class*="outbrain"],
+[class*="taboola"],
+[class*="OUTBRAIN"],
+[class*="TABOOLA"],
+[class*="native-ad"],
+[class*="native_ad"],
+[data-native-ad],
+[class*="preroll"],
+[class*="midroll"] {
+  display: none !important;
+}
+
+/* Ẩn overlay và popup quảng cáo */
+[class*="overlay"][class*="ad"],
+[class*="popup"][class*="ad"],
+[id*="overlay"][id*="ad"],
+[id*="popup"][id*="ad"],
+.ad-overlay,
+.popup-ad {
+  display: none !important;
+}
+
+/* Chặn sticky ads */
+[class*="sticky"][class*="ad"],
+[class*="fixed"][class*="ad"],
+.sticky-ad,
+.fixed-ad {
+  display: none !important;
+}
