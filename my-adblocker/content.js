@@ -152,28 +152,71 @@ function removeEmptyContainers() {
 // Chặn popup và popunder
 function blockPopups() {
   // Override window.open
-  const originalOpen = window.open;
   window.open = function(...args) {
     console.log('[Ad Blocker] Đã chặn popup');
     return null;
   };
   
-  // Chặn các sự kiện click không mong muốn
+  // Chặn target="_blank" trên các link quảng cáo
   document.addEventListener('click', function(e) {
-    if (e.target.tagName === 'A') {
-      const href = e.target.getAttribute('href');
-      if (href && (
-        href.includes('doubleclick') ||
-        href.includes('googlesyndication') ||
-        href.includes('advertising') ||
-        href.includes('/ads/') ||
-        href.includes('adserver')
-      )) {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log('[Ad Blocker] Đã chặn link quảng cáo');
-        return false;
+    const target = e.target.closest('a, button, [role="button"]');
+    if (!target) return;
+    
+    const href = target.getAttribute('href') || '';
+    const target_attr = target.getAttribute('target') || '';
+    
+    // Danh sách domain quảng cáo
+    const adDomains = [
+      'doubleclick', 'googlesyndication', 'googleadservices', 
+      'advertising', 'adserver', 'criteo', 'outbrain', 'taboola',
+      'exoclick', 'popads', 'clickadilla', 'admaven', 'adf.ly',
+      'bit.ly', 'tinyurl', 'adly', 'adclick'
+    ];
+    
+    // Kiểm tra href
+    const isAdLink = adDomains.some(domain => href.toLowerCase().includes(domain));
+    
+    if (isAdLink) {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('[Ad Blocker] Đã chặn link quảng cáo:', href);
+      return false;
+    }
+    
+    // Chặn target="_blank" trên element có class ad
+    if (target_attr === '_blank' && (
+      target.className.toLowerCase().includes('ad') ||
+      target.id.toLowerCase().includes('ad') ||
+      (target.parentElement && (
+        target.parentElement.className.toLowerCase().includes('ad') ||
+        target.parentElement.id.toLowerCase().includes('ad')
+      ))
+    )) {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('[Ad Blocker] Đã chặn popup từ link quảng cáo');
+      return false;
+    }
+  }, true);
+  
+  // Chặn các popups được tạo bằng setTimeout/setInterval
+  const originalSetTimeout = window.setTimeout;
+  window.setTimeout = function(fn, delay, ...args) {
+    if (typeof fn === 'function') {
+      const fnStr = fn.toString();
+      if (fnStr.includes('window.open') || fnStr.includes('showad')) {
+        console.log('[Ad Blocker] Đã chặn popup được lên lịch');
+        return 0;
       }
+    }
+    return originalSetTimeout.apply(this, arguments);
+  };
+  
+  // Chặn mousedown/mouseup events trên element quảng cáo
+  document.addEventListener('mousedown', function(e) {
+    const target = e.target.closest('[class*="ad"], [id*="ad"]');
+    if (target && target.onclick) {
+      target.onclick = null;
     }
   }, true);
 }
