@@ -210,10 +210,20 @@ const observer = new MutationObserver((mutations) => {
 });
 
 // Bắt đầu theo dõi
-observer.observe(document.body, {
-  childList: true,
-  subtree: true
-});
+if (document.body) {
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+} else {
+  // Nếu document.body chưa sẵn, đợi cho đến khi nó được tạo
+  document.addEventListener('DOMContentLoaded', () => {
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  });
+}
 
 // Chạy lại sau khi trang load xong
 window.addEventListener('load', () => {
