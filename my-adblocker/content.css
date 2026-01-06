@@ -107,3 +107,21 @@ iframe[src*="revcontent"] {
 .fixed-ad {
   display: none !important;
 }
+
+/* Tắt autoplay cho video và audio */
+video[autoplay],
+audio[autoplay] {
+  autoplay: none !important;
+}
+
+/* Ẩn controls mặc định để ngăn autoplay */
+video:not([controls]) {
+  pointer-events: auto !important;
+}
+
+/* Chặn video overlay ads */
+[class*="video-overlay"],
+[class*="video-ad-overlay"],
+.video-overlay-ad {
+  display: none !important;
+}
