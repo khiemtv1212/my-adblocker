@@ -1,91 +1,59 @@
 // Danh sách các selector phổ biến của quảng cáo (mở rộng)
 const adSelectors = [
-  // ID patterns
-  '[id*="ad-"]',
-  '[id*="ads-"]',
-  '[id*="ad_"]',
-  '[id*="google_ads"]',
-  '[id*="advertisement"]',
-  '[id^="ad-"]',
-  '[id^="ads-"]',
-  '[id$="-ad"]',
-  '[id$="-ads"]',
-  
-  // Class patterns
-  '[class*="ad-"]',
-  '[class*="ads-"]',
-  '[class*="ad_"]',
-  '[class*="advertisement"]',
-  '[class*="google-ad"]',
-  '[class*="advert"]',
-  '[class*="banner"]',
-  '[class*="sponsor"]',
-  '[class*="promo"]',
-  '[class*="popup"]',
-  '[class^="ad-"]',
-  '[class^="ads-"]',
-  
-  // Common ad elements
+  // Google Ads specific
   'ins.adsbygoogle',
   '[data-ad-slot]',
   '[data-ad-client]',
   '[data-google-query-id]',
+  
+  // AMP ads
   'amp-ad',
   'amp-embed[type="taboola"]',
   'amp-embed[type="outbrain"]',
   
-  // Iframes
+  // Iframes from ad networks
   'iframe[src*="doubleclick"]',
   'iframe[src*="googlesyndication"]',
   'iframe[src*="googleadservices"]',
-  'iframe[src*="/ads/"]',
   'iframe[id*="google_ads"]',
   'iframe[name*="google_ads"]',
-  'iframe[src*="advertising"]',
-  'iframe[src*="ad."]',
-  'iframe[src*="ads."]',
-  'iframe[src*="adserver"]',
   'iframe[src*="criteo"]',
   'iframe[src*="outbrain"]',
   'iframe[src*="taboola"]',
   'iframe[src*="exoclick"]',
   'iframe[src*="popads"]',
+  'iframe[src*="revcontent"]',
+  'iframe[src*="chargeads"]',
   
-  // Specific class names
-  '.advert',
-  '.banner-ad',
-  '.sponsor',
-  '.sponsored',
+  // Common ad container patterns - BUT NOT matching normal elements
+  '.advertisement',
+  '.advertising',
   '.ad-container',
   '.ad-wrapper',
-  '.ad-slot',
   '.ad-unit',
   '.ad-banner',
   '.ad-box',
   '.ad-block',
-  '.advertisement',
-  '.advertising',
-  '.google-ad',
   '.adsbox',
+  '.advert',
   '.adsbygoogle',
   
-  // Aria labels
+  // Specific patterns for ads
+  '.banner-ad',
+  '.google-ad',
+  '.google_ads',
+  '.top-ad',
+  '.bottom-ad',
+  '.sidebar-ad',
+  '.content-ad',
+  '[class*="advertisement"]',
+  '[id*="advertisement"]',
+  
+  // Aria labels for ads
   '[aria-label*="Advertisement"]',
   '[aria-label*="Sponsored"]',
   '[aria-label*="Quảng cáo"]',
   '[aria-label*="Tài trợ"]',
-  
-  // Data attributes
-  '[data-ad]',
-  '[data-ads]',
-  '[data-advertisement]',
-  '[data-sponsor]',
-  
-  // Video ads
-  '.video-ads',
-  '.video-ad',
-  '[class*="preroll"]',
-  '[class*="midroll"]',
   
   // Native ads
   '[class*="native-ad"]',
@@ -120,21 +88,25 @@ function hideAds() {
   
   let blockedCount = 0;
   ads.forEach(ad => {
-    // Kiểm tra xem element có đang hiển thị không
-    if (ad.offsetParent !== null || ad.offsetWidth > 0 || ad.offsetHeight > 0) {
-      // Ẩn element và parent container nếu cần
-      ad.style.setProperty('display', 'none', 'important');
-      ad.style.setProperty('visibility', 'hidden', 'important');
-      ad.style.setProperty('opacity', '0', 'important');
-      
-      // Thử ẩn parent nếu parent chỉ chứa quảng cáo
-      const parent = ad.parentElement;
-      if (parent && parent.children.length === 1) {
-        parent.style.setProperty('display', 'none', 'important');
-      }
-      
-      blockedCount++;
+    // Bỏ qua các element không cần thiết
+    if (!ad || !ad.offsetParent) return;
+    
+    // Kiểm tra xem element có thực sự là quảng cáo không
+    const isRealAd = checkIfRealAd(ad);
+    if (!isRealAd) return;
+    
+    // Ẩn element
+    ad.style.setProperty('display', 'none', 'important');
+    ad.style.setProperty('visibility', 'hidden', 'important');
+    ad.style.setProperty('opacity', '0', 'important');
+    
+    // Thử ẩn parent nếu parent chỉ chứa quảng cáo
+    const parent = ad.parentElement;
+    if (parent && parent.children.length === 1 && !isImportantElement(parent)) {
+      parent.style.setProperty('display', 'none', 'important');
     }
+    
+    blockedCount++;
   });
   
   // Xóa các empty divs có thể còn lại
@@ -143,6 +115,57 @@ function hideAds() {
   if (blockedCount > 0) {
     console.log(`[Ad Blocker] Đã chặn ${blockedCount} quảng cáo`);
   }
+}
+
+// Kiểm tra xem element có phải là quảng cáo thực sự không
+function checkIfRealAd(element) {
+  // Những element này luôn là quảng cáo
+  if (element.tagName === 'INS' || 
+      element.tagName === 'AMP-AD' ||
+      element.src?.includes('doubleclick') ||
+      element.src?.includes('googlesyndication')) {
+    return true;
+  }
+  
+  // Kiểm tra data attributes
+  if (element.dataset?.adSlot || element.dataset?.adClient) {
+    return true;
+  }
+  
+  // Aria labels rõ ràng là quảng cáo
+  const ariaLabel = element.getAttribute('aria-label') || '';
+  if (ariaLabel.includes('Advertisement') || 
+      ariaLabel.includes('Sponsored') ||
+      ariaLabel.includes('Quảng cáo') ||
+      ariaLabel.includes('Tài trợ')) {
+    return true;
+  }
+  
+  // Class names như .advertisement, .advertising chắc chắn là quảng cáo
+  if (element.classList.contains('advertisement') || 
+      element.classList.contains('advertising') ||
+      element.classList.contains('adsbox')) {
+    return true;
+  }
+  
+  return false;
+}
+
+// Kiểm tra xem element có phải là element quan trọng không
+function isImportantElement(element) {
+  const tag = element.tagName?.toLowerCase();
+  const id = (element.id || '').toLowerCase();
+  const className = (element.className || '').toLowerCase();
+  
+  // Những element không nên ẩn
+  const importantTags = ['body', 'html', 'head', 'main', 'nav', 'header', 'footer', 'section', 'article'];
+  if (importantTags.includes(tag)) return true;
+  
+  // ID hoặc class quan trọng
+  if (id.includes('main') || id.includes('content') || id.includes('app')) return true;
+  if (className.includes('main') || className.includes('content') || className.includes('container')) return true;
+  
+  return false;
 }
 
 // Hàm xóa các container trống
@@ -248,12 +271,19 @@ const observer = new MutationObserver((mutations) => {
       mutation.addedNodes.forEach(node => {
         if (node.nodeType === 1) { // Element node
           const tag = node.tagName?.toLowerCase();
-          const className = node.className?.toString() || '';
-          const id = node.id || '';
           
-          // Kiểm tra nếu là quảng cáo
-          if (tag === 'iframe' || tag === 'ins' || 
-              className.includes('ad') || id.includes('ad')) {
+          // Chỉ xử lý những thứ chắc chắn là quảng cáo
+          if (tag === 'iframe' || tag === 'ins' || tag === 'amp-ad') {
+            shouldHideAds = true;
+          }
+          
+          // Kiểm tra src attribute của iframe
+          if (tag === 'iframe' && node.src?.includes('doubleclick')) {
+            shouldHideAds = true;
+          }
+          
+          // Kiểm tra data attributes
+          if (node.dataset?.adSlot || node.dataset?.adClient) {
             shouldHideAds = true;
           }
         }
