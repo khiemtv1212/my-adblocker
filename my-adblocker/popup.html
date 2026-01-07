@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <style>
@@ -11,13 +12,13 @@
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
     }
-    
+
     h2 {
       margin: 0 0 15px 0;
       font-size: 20px;
       text-align: center;
     }
-    
+
     .status {
       background: rgba(255, 255, 255, 0.2);
       padding: 12px;
@@ -25,24 +26,24 @@
       margin-bottom: 15px;
       backdrop-filter: blur(10px);
     }
-    
+
     .stat-item {
       display: flex;
       justify-content: space-between;
       margin: 8px 0;
       font-size: 14px;
     }
-    
+
     .stat-value {
       font-weight: bold;
       font-size: 16px;
     }
-    
+
     .toggle-container {
       text-align: center;
       margin: 15px 0;
     }
-    
+
     .toggle-btn {
       background: white;
       color: #667eea;
@@ -54,17 +55,17 @@
       cursor: pointer;
       transition: all 0.3s;
     }
-    
+
     .toggle-btn:hover {
       transform: scale(1.05);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     }
-    
+
     .toggle-btn.disabled {
       background: #ff6b6b;
       color: white;
     }
-    
+
     .footer {
       text-align: center;
       font-size: 11px;
@@ -73,9 +74,10 @@
     }
   </style>
 </head>
+
 <body>
   <h2>🛡️ Ad Blocker</h2>
-  
+
   <div class="status">
     <div class="stat-item">
       <span>Trạng thái:</span>
@@ -86,16 +88,17 @@
       <span class="stat-value" id="blocked-count">0</span>
     </div>
   </div>
-  
+
   <div class="toggle-container">
     <button class="toggle-btn" id="toggle-btn">Tắt Ad Blocker</button>
   </div>
-  
+
   <div class="footer">
-    Simple Ad Blocker v1.0<br>
+    Simple Ad Blocker<br>
     Chặn quảng cáo hiệu quả
   </div>
-  
+
   <script src="popup.js"></script>
 </body>
+
 </html>
